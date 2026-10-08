@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Collection Desk</title>
+<style>
+body{font-family:Georgia,serif;max-width:820px;margin:32px auto;padding:0 16px;color:#1c1917;background:#fafaf9}
+h1{font-size:28px;margin-bottom:4px}p.note{color:#57534e;font-size:14px}label{display:block;margin-top:12px;font-size:13px}input,textarea,select{width:100%;box-sizing:border-box;padding:8px;margin-top:4px;border:1px solid #d6d3d1;border-radius:6px;font:inherit}button{margin-top:16px;padding:10px 16px;border:0;border-radius:6px;background:#1c1917;color:#fff;cursor:pointer}pre{white-space:pre-wrap;background:#fff;border:1px solid #e7e5e4;padding:16px;border-radius:8px}
+</style>
+</head>
+<body>
+<h1>Collection Desk</h1>
+<p class="note">Offline draft tool. Not legal advice. Does not send mail or collect money.</p>
+<label>Your name / studio<input id="seller" value="Studio" /></label>
+<label>Client<input id="client" value="Client" /></label>
+<label>Project<input id="project" value="Website build" /></label>
+<label>Currency<select id="ccy"><option>USD</option><option>CNY</option><option>EUR</option></select></label>
+<label>Total fee<input id="total" type="number" value="3000" /></label>
+<label>Deposit percent<input id="dep" type="number" value="50" /></label>
+<label>Days overdue<input id="days" type="number" value="14" /></label>
+<label>Change requested<textarea id="change">Extra landing page and two revision rounds.</textarea></label>
+<button type="button" onclick="build()">Generate drafts</button>
+<pre id="out">Drafts appear here.</pre>
+<script>
+function build(){
+  const seller=document.getElementById('seller').value;
+  const client=document.getElementById('client').value;
+  const project=document.getElementById('project').value;
+  const ccy=document.getElementById('ccy').value;
+  const total=Number(document.getElementById('total').value)||0;
+  const dep=Number(document.getElementById('dep').value)||0;
+  const days=Number(document.getElementById('days').value)||0;
+  const change=document.getElementById('change').value;
+  const deposit=Math.round(total*dep)/100;
+  const rest=total-deposit;
+  const extra=Math.round(total*0.15);
+  document.getElementById('out').textContent=
+`DEPOSIT SCHEDULE / 定金节点
+Seller: ${seller}
+Client: ${client}
+Project: ${project}
+Total: ${ccy} ${total}
+Deposit (${dep}%): ${ccy} ${deposit} due before work starts.
+Balance: ${ccy} ${rest} due on delivery.
+Work does not start until the deposit clears.
+
+CHANGE ORDER / 变更单
+Requested change: ${change}
+Estimate: ${ccy} ${extra}, billed only after written acceptance.
+Out-of-scope work is not included in the original fee.
+
+OVERDUE NOTE / 逾期提醒
+The balance of ${ccy} ${rest} for ${project} is ${days} days past the agreed date.
+Please pay within 7 days or confirm a written date.
+This note is a commercial reminder, not a legal demand.`;
+}
+</script>
+</body>
+</html>
